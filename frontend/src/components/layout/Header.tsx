@@ -7,14 +7,12 @@ import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simple local state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Tasks", href: "/tasks" },
-    { name: "Calendar", href: "/calendar" },
-    { name: "Analytics", href: "/analytics" },
   ];
 
   const toggleMobileMenu = () => {
@@ -24,15 +22,16 @@ export default function Header() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setIsMobileMenuOpen(false);
-    // Add your logout logic here
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <div className="bg-white/90  border-b border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+      <div
+        onClick={() => console.log("hi")}
+        className="bg-white/90  border-b border-gray-200/50 dark:border-gray-700/50 shadow-lg"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-20">
-            {/* Logo/Brand */}
             <Link
               href="/dashboard"
               className="flex items-center space-x-2 group hover:scale-105 transition-all duration-200"
@@ -71,7 +70,7 @@ export default function Header() {
                   className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 group hover:scale-105 ${
                     pathname === link.href
                       ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/25"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md"
+                      : "text-gray-600 hover:text-gray-900 text-[14px] "
                   }`}
                 >
                   <span
@@ -143,7 +142,7 @@ export default function Header() {
           isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+        <div className="bg-white/95 dark:bg-gray-100 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-xl">
           <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
             <nav className="space-y-2">
               {navLinks.map((link) => (
@@ -176,7 +175,7 @@ export default function Header() {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full py-3 px-4 bg-red-500/10 text-red-600 hover:bg-red-500/20 border border-red-500/30 rounded-xl font-medium transition-all duration-200 hover:scale-105 hover:shadow-md"
+                    className="w-full py-3 px-4 bg-gray-100 text-red-600 hover:bg-red-500/20 border border-red-500/30 rounded-xl font-medium transition-all duration-200 hover:scale-105 hover:shadow-md"
                   >
                     Logout
                   </button>
@@ -185,7 +184,7 @@ export default function Header() {
                 <div className="space-y-3">
                   <Link
                     href="/login"
-                    className="w-full block py-3 px-4 text-center font-medium text-gray-700 hover:text-indigo-600 bg-gray-100 dark:bg-gray-800 rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-md"
+                    className="w-full text-lg block py-3 px-4 text-center font-medium text-gray-700 hover:t ext-indigo-600 bg-gray-100  rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-md"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Login

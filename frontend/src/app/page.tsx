@@ -1,7 +1,7 @@
 "use";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
-
+import taskMan from "../../public/taskMan.png";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -38,7 +38,7 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 max-w-md animate-slide-up delay-400">
-                <Link href="/register">
+                <Link href="/auth/register">
                   <button className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-lg rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
                     <span className="relative z-10 flex items-center gap-2">
                       Get Started Free
@@ -60,8 +60,8 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link href="/login">
-                  <button className="px-8 py-4 border-2 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 font-semibold text-lg rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                <Link href="/auth/login">
+                  <button className="px-8 py-4 border-2 text-black cursor-pointer font-semibold text-lg rounded-2xl hover:bg-green-600  hover:shadow-lg  bg-green-200 border-none transition-all duration-300 hover:scale-105">
                     Login Now
                   </button>
                 </Link>
@@ -105,6 +105,7 @@ export default function Home() {
                   <div className="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">
                     👥
                   </div>
+                  W
                   <span className="text-sm font-medium text-gray-700">
                     Team Sync
                   </span>
@@ -123,11 +124,11 @@ export default function Home() {
             <div className="order-1 lg:order-2 relative animate-fade-in-right">
               <div className="relative z-10">
                 {/* Main Illustration */}
-                {/* <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                  alt="Happy woman working on laptop"
+                <img
+                  src={taskMan}
+                  alt="Task Management Illustration"
                   className="w-full max-w-md mx-auto lg:max-w-lg rounded-3xl shadow-2xl ring-4 ring-white/50 hover:scale-105 transition-all duration-500 cursor-pointer"
-                /> */}
+                />
 
                 {/* Decorative Elements */}
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-indigo-400/30 to-purple-400/30 rounded-2xl blur-xl animate-pulse"></div>
