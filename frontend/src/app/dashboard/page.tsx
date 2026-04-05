@@ -112,23 +112,21 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800">
+    <div className="pt-21 flex min-h-screen bg-gradient-to-br bg-white">
+      <Header />
+
       <Sidebar />
-
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <Header />
-
+      <div className="flex-1 flex flex-col overflow-hidden ">
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {/* Hero Section */}
           <div className="mb-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
               <div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-indigo-900 bg-clip-text text-transparent mb-3">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black bg-clip-text  mb-3">
                   Welcome Back! 👋
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400 max-w-md">
+                <p className="text-xl max-w-md">
                   Manage your tasks efficiently with smart filtering and
                   sorting.
                 </p>

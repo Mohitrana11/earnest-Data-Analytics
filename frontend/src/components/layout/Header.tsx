@@ -105,13 +105,13 @@ export default function Header() {
               ) : (
                 <>
                   <Link
-                    href="/login"
+                    href="/auth/login"
                     className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 hover:scale-105"
                   >
                     Login
                   </Link>
                   <Link
-                    href="/register"
+                    href="/auth/register"
                     className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 text-sm hover:scale-105 hover:-translate-y-0.5"
                   >
                     Get Started
@@ -183,14 +183,14 @@ export default function Header() {
               ) : (
                 <div className="space-y-3">
                   <Link
-                    href="/login"
+                    href="/auth/login"
                     className="w-full text-lg block py-3 px-4 text-center font-medium text-gray-700 hover:t ext-indigo-600 bg-gray-100  rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-md"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Login
                   </Link>
                   <Link
-                    href="/register"
+                    href="/auth/register"
                     className="w-full block py-3.5 px-4 text-center font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 hover:scale-105 hover:-translate-y-1"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

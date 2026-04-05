@@ -2,13 +2,12 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth"; // Your auth hook
 import {
   FaHome,
   FaTasks,
-  FaCalendarAlt,
   FaChartBar,
-  FaCog,
   FaUser,
   FaSignOutAlt,
   FaPlus,
@@ -21,8 +20,8 @@ import {
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
+  const { user, logout } = useAuth();
 
   const navItems = [
     {
@@ -38,162 +37,136 @@ export default function Sidebar() {
       color: "text-emerald-600",
     },
     {
-      name: "Calendar",
-      href: "/calendar",
-      icon: FaCalendarAlt,
-      color: "text-blue-600",
-    },
-    {
       name: "Analytics",
       href: "/analytics",
       icon: FaChartBar,
       color: "text-purple-600",
     },
-    {
-      name: "Settings",
-      href: "/settings",
-      icon: FaCog,
-      color: "text-orange-600",
-    },
   ];
 
-  const handleLogout = () => {
-    // Add your logout logic here
-    router.push("/login");
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
     <>
-      {/* Collapsible Toggle Button (for narrow screens) */}
+      {/* Mobile Toggle */}
       <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-20 left-0 z-40 p-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-r border-gray-200 dark:border-gray-800 shadow-lg md:hidden hover:scale-105 transition-all duration-200"
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed top-20 left-0 z-50 p-4 bg-white shadow-xl border-r border-gray-200 hover:shadow-2xl hover:scale-105 md:hidden"
       >
-        {isCollapsed ? (
-          <FaBars className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        {isOpen ? (
+          <FaTimes className="w-6 h-6 text-gray-700" />
         ) : (
-          <FaTimes className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+          <FaBars className="w-6 h-6 text-gray-700" />
         )}
       </button>
 
-      {/* Main Sidebar */}
+      {/* Sidebar */}
       <aside
-        className={`fixed md:static top-20 left-0 h-[calc(100vh-5rem)] w-64 md:w-72 bg-gradient-to-b from-white/95 to-gray-50/95 dark:from-gray-900/95 dark:to-gray-800/95 backdrop-blur-xl border-r border-gray-200/50 dark:border-gray-800/50 shadow-2xl z-30 transform transition-all duration-300 ease-in-out ${
-          isCollapsed ? "-translate-x-full" : "translate-x-0"
-        } md:translate-x-0`}
+        className={`fixed md:relative top-20 left-0 h-screen w-72 bg-white shadow-2xl border-r border-gray-200 z-40 transform transition-all duration-500 ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-100/50 dark:border-gray-800/50 sticky top-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm z-10">
-          <div className="flex items-center space-x-3 mb-1">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200">
-              <FaTasks className="w-5 h-5 text-white" />
+        <div className="sticky top-0 p-6 border-b border-gray-100 z-10 bg-white">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <FaTasks className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                 TaskFlow
               </h1>
-              <p className="text-xs text-gray-500 font-medium">Dashboard</p>
+              <p className="text-xs text-gray-500">Dashboard</p>
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative mt-6">
+          {/* Search */}
+          <div className="relative">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search tasks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all duration-200 placeholder-gray-500 hover:border-indigo-300"
+              placeholder="Quick search..."
+              className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-indigo-500/30 focus:border-indigo-500 transition-all shadow-sm"
             />
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="p-4 pt-6 flex-1 overflow-y-auto">
-          <div className="space-y-1 mb-8">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`group relative flex items-center p-4 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-x-1 hover:bg-gradient-to-r hover:from-white/70 hover:to-indigo-50/70 dark:hover:from-gray-800/70 dark:hover:to-slate-800/70 ${
-                    isActive
-                      ? "bg-gradient-to-r from-indigo-500/15 to-purple-500/15 text-indigo-700 dark:text-indigo-400 shadow-lg border-2 border-indigo-200/50 ring-4 ring-indigo-100/50 font-semibold scale-105"
-                      : "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-                  }`}
-                >
-                  <Icon
-                    className={`w-5 h-5 mr-3 flex-shrink-0 transition-all duration-200 ${
-                      isActive ? item.color : `group-hover:${item.color}`
-                    }`}
-                  />
-                  <span className="font-medium">{item.name}</span>
+        <nav className="px-6 py-8 space-y-2 flex-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`group flex items-center p-4 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-px ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-700 border-2 border-indigo-200 shadow-md font-semibold"
+                    : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                }`}
+              >
+                <Icon
+                  className={`w-5 h-5 mr-4 ${isActive ? item.color : `group-hover:${item.color}`}`}
+                />
+                <span className="font-medium">{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-                  {/* Active Indicator */}
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-r-full shadow-lg" />
-                  )}
-
-                  {/* Hover Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm" />
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Quick Actions */}
-          <div className="border-t border-gray-100/30 dark:border-gray-800/30 pt-6 mb-8">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 px-1 flex items-center gap-2">
-              Quick Actions
-            </h3>
-            <div className="space-y-2">
-              <button className="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-indigo-500/10 hover:text-indigo-700 dark:hover:text-indigo-400 transition-all duration-200 hover:shadow-sm hover:scale-[1.02]">
-                <FaPlus className="w-4 h-4" />
-                New Task
-              </button>
-              <button className="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all duration-200 hover:shadow-sm hover:scale-[1.02]">
-                <FaCheckCircle className="w-4 h-4" />
-                Mark All Complete
-              </button>
-            </div>
-          </div>
-
-          {/* Profile & Logout */}
-          <div className="border-t border-gray-100/30 dark:border-gray-800/30 pt-6 mt-auto sticky bottom-0 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm p-4 rounded-t-2xl -mx-4 mb-4">
-            <div className="flex items-center space-x-3 mb-4 p-3 rounded-xl hover:bg-gray-100/60 dark:hover:bg-gray-800/60 transition-all duration-200 cursor-pointer hover:scale-[1.02]">
-              <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold shadow-lg ring-2 ring-white/50">
-                U
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-gray-900 dark:text-white truncate">
-                  John Doe
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                  john@example.com
-                </p>
-              </div>
-              <FaUser className="w-4 h-4 text-gray-500 flex-shrink-0" />
-            </div>
-
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center gap-3 p-3 text-left text-red-600 hover:text-red-700 hover:bg-red-50/60 dark:hover:bg-red-500/10 rounded-xl transition-all duration-200 hover:shadow-md hover:scale-[1.02] font-medium border border-red-100/50 dark:border-red-900/50"
-            >
-              <FaSignOutAlt className="w-4 h-4" />
-              Sign Out
+        {/* Quick Actions */}
+        <div className="border-t border-gray-100 px-6 py-6">
+          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
+            Quick Actions
+          </h3>
+          <div className="space-y-2">
+            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 transition-all border hover:border-indigo-200">
+              <FaPlus className="w-4 h-4" />
+              New Task
+            </button>
+            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 hover:text-emerald-700 transition-all border hover:border-emerald-200">
+              <FaCheckCircle className="w-4 h-4" />
+              Mark All Complete
             </button>
           </div>
-        </nav>
+        </div>
+
+        {/* Profile & Logout */}
+        <div className="border-t border-gray-100 p-6 bg-white sticky bottom-0">
+          <div className="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer mb-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+              {user?.username?.[0]?.toUpperCase() || "U"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 truncate">
+                {user?.username || "John Doe"}
+              </p>
+              <p className="text-sm text-gray-500 truncate">
+                {user?.email || "john@example.com"}
+              </p>
+            </div>
+            <FaUser className="w-5 h-5 text-gray-500" />
+          </div>
+
+          {/* ✅ REAL LOGOUT */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 p-4 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all hover:shadow-md font-medium border hover:border-red-200"
+          >
+            <FaSignOutAlt className="w-5 h-5" />
+            Sign Out
+          </button>
+        </div>
       </aside>
 
       {/* Mobile Overlay */}
-      {isCollapsed && (
+      {!isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-20 md:hidden"
-          onClick={() => setIsCollapsed(true)}
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setIsOpen(true)}
         />
       )}
     </>
